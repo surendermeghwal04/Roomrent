@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>टिप कैलकुलेटर</title>
+    <title>Bill Split Calculator</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #333;
             min-height: 100vh;
             display: flex;
@@ -32,7 +32,7 @@
         }
         
         .header {
-            background: #4a00e0;
+            background: #5a67d8;
             color: white;
             padding: 25px;
             text-align: center;
@@ -73,19 +73,21 @@
         }
         
         input[type="number"]:focus {
-            border-color: #4a00e0;
+            border-color: #5a67d8;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+            box-shadow: 0 0 0 3px rgba(90, 103, 216, 0.1);
         }
         
-        .tip-options {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+        .split-options {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 25px;
+            flex-wrap: wrap;
         }
         
-        .tip-btn {
+        .split-btn {
+            flex: 1;
+            margin: 0 5px;
             padding: 12px;
             background: #f0f0f0;
             border: 2px solid #e1e1e1;
@@ -94,35 +96,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-        }
-        
-        .tip-btn:hover {
-            background: #e6e6e6;
-        }
-        
-        .tip-btn.active {
-            background: #4a00e0;
-            color: white;
-            border-color: #4a00e0;
-        }
-        
-        .split-options {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-        }
-        
-        .split-btn {
-            flex: 1;
-            margin: 0 5px;
-            padding: 10px;
-            background: #f0f0f0;
-            border: 2px solid #e1e1e1;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            min-width: 70px;
         }
         
         .split-btn:hover {
@@ -130,9 +104,20 @@
         }
         
         .split-btn.active {
-            background: #2575fc;
+            background: #5a67d8;
             color: white;
-            border-color: #2575fc;
+            border-color: #5a67d8;
+        }
+        
+        .custom-split {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .custom-split input {
+            flex: 1;
+            margin-left: 10px;
         }
         
         .results {
@@ -164,7 +149,7 @@
         
         .result-value {
             font-weight: 700;
-            color: #4a00e0;
+            color: #5a67d8;
             font-size: 18px;
         }
         
@@ -178,18 +163,21 @@
         .split-title {
             font-weight: 600;
             margin-bottom: 10px;
-            color: #2575fc;
+            color: #5a67d8;
             text-align: center;
         }
         
         .split-details {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         
         .split-person {
             text-align: center;
             flex: 1;
+            min-width: 80px;
+            margin: 5px;
         }
         
         .split-count {
@@ -200,14 +188,14 @@
         
         .split-amount {
             font-weight: 700;
-            color: #4a00e0;
+            color: #5a67d8;
             font-size: 16px;
         }
         
         .reset-btn {
             width: 100%;
             padding: 16px;
-            background: #4a00e0;
+            background: #5a67d8;
             color: white;
             border: none;
             border-radius: 10px;
@@ -219,7 +207,7 @@
         }
         
         .reset-btn:hover {
-            background: #3a00b0;
+            background: #4c51bf;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
@@ -241,17 +229,21 @@
                 padding: 20px;
             }
             
-            .tip-options {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .split-options {
-                flex-wrap: wrap;
+                gap: 10px;
             }
             
             .split-btn {
+                flex: 0 0 calc(50% - 5px);
+                margin: 0;
+            }
+            
+            .split-details {
+                justify-content: center;
+            }
+            
+            .split-person {
                 flex: 0 0 calc(50% - 10px);
-                margin-bottom: 10px;
             }
         }
     </style>
@@ -259,46 +251,56 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>टिप कैलकुलेटर</h1>
-            <p>बिल की राशि और टिप प्रतिशत दर्ज करें, कुल राशि और प्रति व्यक्ति खर्च जानें</p>
+            <h1>Bill Split Calculator</h1>
+            <p>Enter the total bill amount and see how much each person needs to pay</p>
         </div>
         
         <div class="calculator">
             <div class="input-group">
-                <label for="billAmount">बिल राशि (₹)</label>
-                <input type="number" id="billAmount" placeholder="कुल बिल राशि दर्ज करें" min="0" step="0.01">
+                <label for="billAmount">Total Bill Amount (₹)</label>
+                <input type="number" id="billAmount" placeholder="Enter total bill amount" min="0" step="0.01">
             </div>
             
             <div class="input-group">
-                <label>बिल कितने लोगों में बाँटना है?</label>
+                <label>How many people to split between?</label>
                 <div class="split-options">
-                    <button class="split-btn" data-split="1">1 व्यक्ति</button>
-                    <button class="split-btn" data-split="2">2 लोग</button>
-                    <button class="split-btn" data-split="3">3 लोग</button>
-                    <button class="split-btn" data-split="4">4 लोग</button>
+                    <button class="split-btn active" data-split="2">2 People</button>
+                    <button class="split-btn" data-split="3">3 People</button>
+                    <button class="split-btn" data-split="4">4 People</button>
+                    <button class="split-btn" data-split="5">5 People</button>
+                </div>
+                
+                <div class="custom-split">
+                    <label for="customSplit">Custom:</label>
+                    <input type="number" id="customSplit" placeholder="Enter other number" min="1" step="1">
                 </div>
             </div>
             
             <div class="results">
                 <div class="result-item">
-                    <span class="result-label">बिल राशि:</span>
+                    <span class="result-label">Total Bill:</span>
                     <span class="result-value" id="billDisplay">₹0.00</span>
                 </div>
                 
                 <div class="result-item">
-                    <span class="result-label">कुल राशि:</span>
-                    <span class="result-value" id="totalDisplay">₹0.00</span>
+                    <span class="result-label">Number of People:</span>
+                    <span class="result-value" id="peopleDisplay">0</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">Per Person:</span>
+                    <span class="result-value" id="perPersonDisplay">₹0.00</span>
                 </div>
                 
                 <div class="split-result" id="splitResult">
-                    <div class="split-title">प्रति व्यक्ति खर्च</div>
+                    <div class="split-title">Amount Per Person</div>
                     <div class="split-details" id="splitDetails">
                         <!-- Split details will be inserted here by JavaScript -->
                     </div>
                 </div>
             </div>
             
-            <button class="reset-btn" id="resetBtn">रीसेट करें</button>
+            <button class="reset-btn" id="resetBtn">Reset Calculator</button>
         </div>
     </div>
 
@@ -306,52 +308,28 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Get DOM elements
             const billAmountInput = document.getElementById('billAmount');
-            const tipPercentInput = document.getElementById('tipPercent');
-            const tipButtons = document.querySelectorAll('.tip-btn');
+            const customSplitInput = document.getElementById('customSplit');
             const splitButtons = document.querySelectorAll('.split-btn');
             const resetBtn = document.getElementById('resetBtn');
             
             // Result display elements
             const billDisplay = document.getElementById('billDisplay');
-            const tipDisplay = document.getElementById('tipDisplay');
-            const totalDisplay = document.getElementById('totalDisplay');
+            const peopleDisplay = document.getElementById('peopleDisplay');
+            const perPersonDisplay = document.getElementById('perPersonDisplay');
             const splitResult = document.getElementById('splitResult');
             const splitDetails = document.getElementById('splitDetails');
             
             // Default values
             let billAmount = 0;
-            let tipPercent = 0;
-            let splitCount = 1;
+            let splitCount = 2;
             
             // Initialize with default values
             updateDisplay();
             
-            // Event listeners for bill amount and tip percent inputs
+            // Event listeners for bill amount input
             billAmountInput.addEventListener('input', function() {
                 billAmount = parseFloat(this.value) || 0;
                 updateDisplay();
-            });
-            
-            tipPercentInput.addEventListener('input', function() {
-                tipPercent = parseFloat(this.value) || 0;
-                updateDisplay();
-            });
-            
-            // Event listeners for tip buttons
-            tipButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all tip buttons
-                    tipButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Set tip percent
-                    tipPercent = parseFloat(this.getAttribute('data-tip'));
-                    tipPercentInput.value = tipPercent;
-                    
-                    updateDisplay();
-                });
             });
             
             // Event listeners for split buttons
@@ -365,27 +343,38 @@
                     
                     // Set split count
                     splitCount = parseInt(this.getAttribute('data-split'));
+                    customSplitInput.value = '';
                     
                     updateDisplay();
                 });
+            });
+            
+            // Event listener for custom split input
+            customSplitInput.addEventListener('input', function() {
+                const customValue = parseInt(this.value);
+                
+                if (customValue && customValue > 0) {
+                    // Remove active class from all split buttons
+                    splitButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Set split count to custom value
+                    splitCount = customValue;
+                    updateDisplay();
+                }
             });
             
             // Reset button event listener
             resetBtn.addEventListener('click', function() {
                 // Reset values
                 billAmount = 0;
-                tipPercent = 0;
-                splitCount = 1;
+                splitCount = 2;
                 
                 // Reset inputs
                 billAmountInput.value = '';
-                tipPercentInput.value = '';
+                customSplitInput.value = '';
                 
-                // Remove active classes from buttons
-                tipButtons.forEach(btn => btn.classList.remove('active'));
+                // Remove active classes from buttons and set default
                 splitButtons.forEach(btn => btn.classList.remove('active'));
-                
-                // Set default active buttons
                 splitButtons[0].classList.add('active');
                 
                 updateDisplay();
@@ -393,15 +382,13 @@
             
             // Function to update the display with calculated values
             function updateDisplay() {
-                // Calculate tip amount and total
-                const tipAmount = billAmount * (tipPercent / 100);
-                const totalAmount = billAmount + tipAmount;
-                const perPersonAmount = totalAmount / splitCount;
+                // Calculate per person amount
+                const perPersonAmount = billAmount / splitCount;
                 
                 // Update display elements
                 billDisplay.textContent = `₹${billAmount.toFixed(2)}`;
-                tipDisplay.textContent = `₹${tipAmount.toFixed(2)}`;
-                totalDisplay.textContent = `₹${totalAmount.toFixed(2)}`;
+                peopleDisplay.textContent = splitCount;
+                perPersonDisplay.textContent = `₹${perPersonAmount.toFixed(2)}`;
                 
                 // Update split details
                 updateSplitDetails(perPersonAmount, splitCount);
@@ -413,7 +400,7 @@
                 splitDetails.innerHTML = '';
                 
                 // Show split result only if split count is more than 1
-                if (splitCount > 1) {
+                if (splitCount > 1 && billAmount > 0) {
                     splitResult.style.display = 'block';
                     
                     // Create split details for each person
@@ -423,7 +410,7 @@
                         
                         const splitCountElement = document.createElement('div');
                         splitCountElement.className = 'split-count';
-                        splitCountElement.textContent = `व्यक्ति ${i}`;
+                        splitCountElement.textContent = `Person ${i}`;
                         
                         const splitAmountElement = document.createElement('div');
                         splitAmountElement.className = 'split-amount';
