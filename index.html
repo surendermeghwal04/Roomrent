@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>टिप कैलकुलेटर</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4a00e0;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .calculator {
+            padding: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        input[type="number"]:focus {
+            border-color: #4a00e0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 0, 224, 0.1);
+        }
+        
+        .tip-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .tip-btn {
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tip-btn:hover {
+            background: #e6e6e6;
+        }
+        
+        .tip-btn.active {
+            background: #4a00e0;
+            color: white;
+            border-color: #4a00e0;
+        }
+        
+        .split-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        .split-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .split-btn:hover {
+            background: #e6e6e6;
+        }
+        
+        .split-btn.active {
+            background: #2575fc;
+            color: white;
+            border-color: #2575fc;
+        }
+        
+        .results {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .result-value {
+            font-weight: 700;
+            color: #4a00e0;
+            font-size: 18px;
+        }
+        
+        .split-result {
+            background: #e8f4ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .split-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2575fc;
+            text-align: center;
+        }
+        
+        .split-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .split-person {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .split-count {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .split-amount {
+            font-weight: 700;
+            color: #4a00e0;
+            font-size: 16px;
+        }
+        
+        .reset-btn {
+            width: 100%;
+            padding: 16px;
+            background: #4a00e0;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .reset-btn:hover {
+            background: #3a00b0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .calculator {
+                padding: 20px;
+            }
+            
+            .tip-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .split-options {
+                flex-wrap: wrap;
+            }
+            
+            .split-btn {
+                flex: 0 0 calc(50% - 10px);
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>टिप कैलकुलेटर</h1>
+            <p>बिल की राशि और टिप प्रतिशत दर्ज करें, कुल राशि और प्रति व्यक्ति खर्च जानें</p>
+        </div>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <label for="billAmount">बिल राशि (₹)</label>
+                <input type="number" id="billAmount" placeholder="कुल बिल राशि दर्ज करें" min="0" step="0.01">
+            </div>
+            
+            <div class="input-group">
+                <label for="tipPercent">टिप प्रतिशत (%)</label>
+                <input type="number" id="tipPercent" placeholder="टिप प्रतिशत दर्ज करें" min="0" max="100" step="0.1">
+            </div>
+            
+            <div class="tip-options">
+                <button class="tip-btn" data-tip="5">5%</button>
+                <button class="tip-btn" data-tip="10">10%</button>
+                <button class="tip-btn" data-tip="15">15%</button>
+                <button class="tip-btn" data-tip="18">18%</button>
+                <button class="tip-btn" data-tip="20">20%</button>
+                <button class="tip-btn" data-tip="25">25%</button>
+            </div>
+            
+            <div class="input-group">
+                <label>बिल कितने लोगों में बाँटना है?</label>
+                <div class="split-options">
+                    <button class="split-btn" data-split="1">1 व्यक्ति</button>
+                    <button class="split-btn" data-split="2">2 लोग</button>
+                    <button class="split-btn" data-split="3">3 लोग</button>
+                    <button class="split-btn" data-split="4">4 लोग</button>
+                </div>
+            </div>
+            
+            <div class="results">
+                <div class="result-item">
+                    <span class="result-label">बिल राशि:</span>
+                    <span class="result-value" id="billDisplay">₹0.00</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">टिप राशि:</span>
+                    <span class="result-value" id="tipDisplay">₹0.00</span>
+                </div>
+                
+                <div class="result-item">
+                    <span class="result-label">कुल राशि:</span>
+                    <span class="result-value" id="totalDisplay">₹0.00</span>
+                </div>
+                
+                <div class="split-result" id="splitResult">
+                    <div class="split-title">प्रति व्यक्ति खर्च</div>
+                    <div class="split-details" id="splitDetails">
+                        <!-- Split details will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <button class="reset-btn" id="resetBtn">रीसेट करें</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const billAmountInput = document.getElementById('billAmount');
+            const tipPercentInput = document.getElementById('tipPercent');
+            const tipButtons = document.querySelectorAll('.tip-btn');
+            const splitButtons = document.querySelectorAll('.split-btn');
+            const resetBtn = document.getElementById('resetBtn');
+            
+            // Result display elements
+            const billDisplay = document.getElementById('billDisplay');
+            const tipDisplay = document.getElementById('tipDisplay');
+            const totalDisplay = document.getElementById('totalDisplay');
+            const splitResult = document.getElementById('splitResult');
+            const splitDetails = document.getElementById('splitDetails');
+            
+            // Default values
+            let billAmount = 0;
+            let tipPercent = 0;
+            let splitCount = 1;
+            
+            // Initialize with default values
+            updateDisplay();
+            
+            // Event listeners for bill amount and tip percent inputs
+            billAmountInput.addEventListener('input', function() {
+                billAmount = parseFloat(this.value) || 0;
+                updateDisplay();
+            });
+            
+            tipPercentInput.addEventListener('input', function() {
+                tipPercent = parseFloat(this.value) || 0;
+                updateDisplay();
+            });
+            
+            // Event listeners for tip buttons
+            tipButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all tip buttons
+                    tipButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Set tip percent
+                    tipPercent = parseFloat(this.getAttribute('data-tip'));
+                    tipPercentInput.value = tipPercent;
+                    
+                    updateDisplay();
+                });
+            });
+            
+            // Event listeners for split buttons
+            splitButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all split buttons
+                    splitButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Set split count
+                    splitCount = parseInt(this.getAttribute('data-split'));
+                    
+                    updateDisplay();
+                });
+            });
+            
+            // Reset button event listener
+            resetBtn.addEventListener('click', function() {
+                // Reset values
+                billAmount = 0;
+                tipPercent = 0;
+                splitCount = 1;
+                
+                // Reset inputs
+                billAmountInput.value = '';
+                tipPercentInput.value = '';
+                
+                // Remove active classes from buttons
+                tipButtons.forEach(btn => btn.classList.remove('active'));
+                splitButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Set default active buttons
+                splitButtons[0].classList.add('active');
+                
+                updateDisplay();
+            });
+            
+            // Function to update the display with calculated values
+            function updateDisplay() {
+                // Calculate tip amount and total
+                const tipAmount = billAmount * (tipPercent / 100);
+                const totalAmount = billAmount + tipAmount;
+                const perPersonAmount = totalAmount / splitCount;
+                
+                // Update display elements
+                billDisplay.textContent = `₹${billAmount.toFixed(2)}`;
+                tipDisplay.textContent = `₹${tipAmount.toFixed(2)}`;
+                totalDisplay.textContent = `₹${totalAmount.toFixed(2)}`;
+                
+                // Update split details
+                updateSplitDetails(perPersonAmount, splitCount);
+            }
+            
+            // Function to update split details
+            function updateSplitDetails(perPersonAmount, splitCount) {
+                // Clear previous split details
+                splitDetails.innerHTML = '';
+                
+                // Show split result only if split count is more than 1
+                if (splitCount > 1) {
+                    splitResult.style.display = 'block';
+                    
+                    // Create split details for each person
+                    for (let i = 1; i <= splitCount; i++) {
+                        const splitPerson = document.createElement('div');
+                        splitPerson.className = 'split-person';
+                        
+                        const splitCountElement = document.createElement('div');
+                        splitCountElement.className = 'split-count';
+                        splitCountElement.textContent = `व्यक्ति ${i}`;
+                        
+                        const splitAmountElement = document.createElement('div');
+                        splitAmountElement.className = 'split-amount';
+                        splitAmountElement.textContent = `₹${perPersonAmount.toFixed(2)}`;
+                        
+                        splitPerson.appendChild(splitCountElement);
+                        splitPerson.appendChild(splitAmountElement);
+                        splitDetails.appendChild(splitPerson);
+                    }
+                } else {
+                    splitResult.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
